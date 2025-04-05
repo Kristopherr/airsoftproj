@@ -1,0 +1,193 @@
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(180deg, rgb(27, 47, 83), rgb(21, 60, 60));
+    font-family: 'Orbitron', sans-serif;
+    color: #ffffff; /* White text */
+}
+
+main {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1in; /* Keeps the 1-inch gap */
+    width: 80%; /* Gives tables more room */
+    max-width: 1000px; /* Ensures it doesn't stretch too much */
+}
+
+/* POS1 (Blue Team) */
+.Pos1 {
+    border: 2px solid #00aaff; /* Light Blue Border */
+    border-radius: 10px;
+    padding: 15px;
+    background: rgba(255, 255, 255, 0.1); /* Subtle White Tint */
+    box-shadow: 0 0 15px #00aaff;
+    text-align: center;
+    animation: glowBlue 2s infinite alternate;
+}
+
+/* (Yellow Team) */
+.Pos2 {
+    border: 2px solid #e1ff00; /* Yellow Border */
+    border-radius: 10px;
+    padding: 15px;
+    background: rgba(255, 255, 255, 0.1);
+    box-shadow: 0 0 15px #e1ff00;
+    text-align: center;
+    animation: glowYellow 2s infinite alternate;
+}
+
+.Pos1, .Pos2 {
+    height: auto; /* Let it expand naturally */
+    min-height: 400px; /* Ensures the box doesn't get too short */
+    width: auto; /* Slightly larger */
+    min-width: 350px; /* More room for text */
+    max-width: 500px; /* Avoid excessive stretching */
+    padding: 25px; /* More space inside the boxes */
+}
+
+/* Table Styles */
+table {
+    width: 100%; /* Ensure the table takes full width of Pos1 & Pos2 */
+    max-width: 100%;
+}
+
+th, td {
+    border: 2px solid; /* Keep separate colors for each table */
+    padding: 15px 35px; /* Restore your original left padding */
+    text-align: center;
+    font-size: 1.5rem; /* Increase text size back */
+}
+
+/* Blue Team Table Headers & Cells */
+.Pos1 th, .Pos1 td {
+    border: 2px solid #00aaff;
+}
+
+.Pos1 th {
+    background: #00aaff;
+    color: #000;
+}
+
+.Pos1 td {
+    background: rgba(0, 170, 255, 0.2);
+    color: #ffffff;
+}
+
+/* Alternating row colors for Blue Team */
+.Pos1 tr:nth-child(even) td {
+    background: rgba(0, 170, 255, 0.4);
+}
+
+/* Yellow Team Table Headers & Cells */
+.Pos2 th, .Pos2 td {
+    border: 2px solid #e1ff00;
+}
+
+.Pos2 th {
+    background: #e1ff00;
+    color: #000;
+}
+
+.Pos2 td {
+    background: rgba(225, 255, 0, 0.2);
+    color: #ffffff;
+}
+
+/* Alternating row colors for Yellow Team */
+.Pos2 tr:nth-child(even) td {
+    background: rgba(225, 255, 0, 0.4);
+}
+
+/* Blue Team Glow Effect */
+@keyframes glowBlue {
+    0% { box-shadow: 0 0 10px #00aaff; }
+    50% { box-shadow: 0 0 20px #00aaff; }
+    100% { box-shadow: 0 0 10px #00aaff; }
+}
+
+/* Yellow Team Glow Effect */
+@keyframes glowYellow {
+    0% { box-shadow: 0 0 10px #e1ff00; }
+    50% { box-shadow: 0 0 20px #e1ff00; }
+    100% { box-shadow: 0 0 10px #e1ff00; }
+}
+
+/* VS Text */
+.vs-text {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #ffffff;
+    text-shadow: 0 0 10px #ffffff;
+    position: relative;
+    top: 0;
+}
+
+/* Centered Headers and Score */
+.TeamName, .Score {
+    display: flex;
+    justify-content: center;
+    margin: 10px 0;
+}
+
+.Versus {
+    display: flex;
+    align-items: center;
+}
+
+/* !!! Standings page below !!! */
+.Standings {
+    height: 100%;
+    width: 100%;
+}
+.standingsH1 {
+    display: flex;
+    font-size: 35px;
+    justify-content: center;
+    text-align: center;
+    margin-bottom: 30px;
+    text-shadow: 0 10px 6px rgba(36, 36, 36, 0.7);
+}
+.standingsTable {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 1.3rem;
+    text-align: center;
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 0 15px #00114a;
+}
+
+.standingsTable th, .standingsTable td {
+    padding: 15px 25px;
+    border: 2px solid #0036e9;
+    color: #ffffff;
+}
+
+.standingsTable th {
+    background: #0036e9;
+    color: #000;
+    text-transform: uppercase;
+}
+
+.standingsTable tr:nth-child(even) td {
+    background-color: rgba(168, 168, 168, 0.3);
+}
+.leaders{
+    display: flex;
+    justify-content: center;
+    margin-top: 25px;
+    font-size: 35px; 
+}
+
