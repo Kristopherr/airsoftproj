@@ -1,0 +1,104 @@
+// ------- c++ code for changing esp32 matrix light colours based on game, score, point scoring, control etc
+#include <Adafruit_NeoPixel.h>
+
+#define LED_PIN    14
+#define NUM_LEDS   64
+#define WIDTH      8
+#define HEIGHT     8
+Adafruit_NeoPixel strip(NUM_LEDS, LED_PIN, NEO_GRB + NEO_KHZ800);
+
+// ---------------- Existing functions ----------------
+void setColor(uint32_t color) {
+  for (int i = 0; i < NUM_LEDS; i++) strip.setPixelColor(i, color);
+  strip.show();
+}
+
+void flashColor(uint32_t color) {
+  setColor(color);
+  delay(250);
+  setColor(strip.Color(0, 0, 0));
+}
+
+// Map XY coordinates to the strip (zigzag layout)
+void setPixelXY(int x, int y, uint32_t color) {
+  if (y % 2 == 0) strip.setPixelColor(y * WIDTH + x, color);
+  else strip.setPixelColor(y * WIDTH + (WIDTH - 1 - x), color);
+}
+
+// ---------------- Winner Animation ----------------
+void winnerAnimation(uint32_t color) {
+  // 1. Flash the entire matrix 3 times
+  for (int i = 0; i < 3; i++) {
+    setColor(color);
+    delay(300);
+    setColor(strip.Color(0, 0, 0));
+    delay(300);
+  }
+
+  // 2. Ripple from center outward
+  int centerX = WIDTH / 2;
+  int centerY = HEIGHT / 2;
+  for (int radius = 0; radius <= 4; radius++) {
+    for (int x = 0; x < WIDTH; x++) {
+      for (int y = 0; y < HEIGHT; y++) {
+        int dx = x - centerX;
+        int dy = y - centerY;
+        if (abs(dx) + abs(dy) == radius) {
+          setPixelXY(x, y, color);
+        }
+      }
+    }
+    strip.show();
+    delay(150);
+  }
+
+  // 3. Optional: rainbow chase effect around the edges
+  for (int j = 0; j < 2; j++) {
+    for (int i = 0; i < WIDTH * HEIGHT; i++) {
+      strip.setPixelColor(i, color);
+      if (i > 0) strip.setPixelColor(i - 1, 0);
+      strip.show();
+      delay(50);
+    }
+  }
+
+  setColor(strip.Color(0, 0, 0)); // clear at the end
+}
+
+// ---------------- Game Over Handler ----------------
+void gameOver(String winner) {
+  if (winner.equalsIgnoreCase("BLUE")) winnerAnimation(strip.Color(0, 0, 255));
+  else if (winner.equalsIgnoreCase("YELLOW")) winnerAnimation(strip.Color(255, 255, 0));
+}
+
+// ---------------- Setup & Loop ----------------
+void setup() {
+  Serial.begin(921600);
+  strip.begin();
+  strip.show();
+  strip.setBrightness(67);
+
+  for (int i = 0; i < 2; i++) {
+    setColor(strip.Color(70, 55, 25)); // startup flash
+    delay(200);
+    setColor(strip.Color(0, 0, 0));
+    delay(200);
+  }
+}
+
+void loop() {
+  if (Serial.available()) {
+    String input = Serial.readStringUntil('\n');
+    input.trim();
+
+    if (input.equalsIgnoreCase("OPEN")) setColor(strip.Color(255, 0, 0));
+    else if (input.equalsIgnoreCase("CLOSED")) setColor(strip.Color(0, 255, 0));
+    else if (input.equalsIgnoreCase("BLUE")) setColor(strip.Color(0, 0, 255));
+    else if (input.equalsIgnoreCase("YELLOW")) setColor(strip.Color(255, 255, 0));
+    else if (input.equalsIgnoreCase("OFF")) setColor(strip.Color(0, 0, 0));
+    else if (input.equalsIgnoreCase("FBLUE")) flashColor(strip.Color(0, 0, 255));
+    else if (input.equalsIgnoreCase("FYELLOW")) flashColor(strip.Color(255, 255, 0));
+    else if (input.equalsIgnoreCase("GAMEOVERBLUE")) gameOver("BLUE");
+    else if (input.equalsIgnoreCase("GAMEOVERYELLOW")) gameOver("YELLOW");
+  }
+}
